@@ -1,0 +1,155 @@
+.progect {
+	padding: 110px 70px;
+}
+
+.landing__title {
+	color: #ffffff;
+	font-weight: 400;
+	font-size: 22px;
+	line-height: 27px;
+	text-align: left;
+	padding-bottom: 23px;
+	border-bottom: 1px solid #dadada;
+	margin: 0;
+	letter-spacing: 0.04em;
+}
+
+.progect__descrition {
+	padding-top: 76px;
+	padding-bottom: 110px;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+}
+
+.progect__descrition-element {
+	margin-right: 3.5%;
+	color: #ffffff;
+	text-align: left;
+}
+
+.progect__descrition-title {
+	font-weight: 400;
+	font-size: 20px;
+	line-height: 24px;
+	max-width: 550px;
+	letter-spacing: -4%;
+}
+
+.progect__descrition-about {
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 20px;
+	max-width: 550px;
+}
+
+.progect__timeline-container {
+	display: flex;
+	flex-direction: row;
+}
+
+.progect__timeline-column {
+	width: 20%;
+	display: flex;
+	flex-direction: column;
+}
+
+.progect__timeline-column:nth-child(2n) {
+	width: 80%;
+}
+
+.progect__timeline {
+	text-align: center;
+	height: 36px;
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 36px;
+
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.progect__timeline_color_green {
+	background-color: #3ddc84;
+	color: #000000;
+}
+
+.progect__timeline_color_grey {
+	background-color: #303030;
+	color: #ffffff;
+}
+
+.progect__timeline-about {
+	color: #8b8b8b;
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 17px;
+	text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+	.progect {
+		padding: 90px 50px;
+	}
+}
+
+@media screen and (max-width: 440px) {
+	.progect {
+		padding: 70px 18px;
+	}
+
+	.landing__title {
+		font-size: 18px;
+		line-height: 22px;
+		padding-bottom: 28px;
+	}
+
+	.progect__descrition {
+		padding-top: 60px;
+		padding-bottom: 60px;
+		margin: 0;
+		flex-direction: column;
+		justify-content: flex-start;
+	}
+	.progect__descrition-element {
+		margin: 0;
+	}
+
+	.progect__descrition-element:last-of-type {
+		margin-top: 56px;
+	}
+
+	.progect__descrition-title {
+		margin-left: 0;
+		margin-right: 0;
+		font-size: 18px;
+		line-height: 22px;
+		max-width: 284px;
+	}
+
+	.progect__descrition-about {
+		font-size: 11px;
+		line-height: 16px;
+		max-width: 284px;
+	}
+
+	.progect__timeline-column {
+		width: 35%;
+	}
+
+	.progect__timeline-column:nth-child(2n) {
+		width: 65%;
+	}
+
+	.progect__timeline {
+		height: 35px;
+
+		font-size: 11px;
+		line-height: 35px;
+	}
+
+	.progect__timeline-about {
+		font-size: 11px;
+		line-height: 13px;
+	}
+}
