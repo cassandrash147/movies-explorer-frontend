@@ -96,9 +96,14 @@
 
 		max-width: 364px;
 	}
+
+	.student__photo {
+	
+		margin-left: 49px;
+	}
 }
 
-@media screen and (max-width: 550px) {
+@media screen and (max-width: 650px) {
 	.student {
 		padding: 70px 14px;
 	}
@@ -137,5 +142,6 @@
 		width: 292px;
 		height: 352px;
 		object-fit: cover;
+		margin-left: 0;
 	}
 }
