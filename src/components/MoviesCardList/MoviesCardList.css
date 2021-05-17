@@ -33,6 +33,16 @@
 	opacity: 0.7;
 }
 
+.movies-card-list__text-error {
+	color: rgba(139, 139, 139, 1);
+	text-align: center;
+	margin: 0px 70px 0;
+}
+
+.movies-card-list__button_disabled {
+	display: none;
+}
+
 @media screen and (max-width: 800px) {
 	.movie-card-list__grid {
 		grid-template-columns: repeat(auto-fill, 342px);

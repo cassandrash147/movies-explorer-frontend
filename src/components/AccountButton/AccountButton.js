@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom';
 function AccountButton(props) {
 	const location = useLocation();
 	return (
-		<li
+		<div
 			className={`account_button ${props.isHeader && 'account_button__header'}`}
 		>
 			<NavLink
@@ -19,7 +19,7 @@ function AccountButton(props) {
 				Аккаунт
 				<img className="account__icon" src={icon} alt="Белый человечек" />
 			</NavLink>
-		</li>
+		</div>
 	);
 }
 

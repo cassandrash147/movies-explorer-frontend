@@ -1,32 +1,31 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './Navigation.css';
-import { Route, Switch, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 function Navigation(props) {
 	const location = useLocation();
 
 	return (
 		<div className="navigation__container">
-			<Switch>
-				<Route exact path="/">
-					<ul className="navigation">
-						<li>
-							<NavLink className="navigation__link" to="/signup">
-								Регистрация
-							</NavLink>
-						</li>
-						<li>
-							<NavLink
-								className="navigation__link navigation__link_type-green"
-								to="signin"
-							>
-								Войти
-							</NavLink>
-						</li>
-					</ul>
-				</Route>
-				<Route exact path="/:route">
+			{!props.loggedIn ? (
+				<ul className="navigation">
+					<li>
+						<NavLink className="navigation__link" to="/signup">
+							Регистрация
+						</NavLink>
+					</li>
+					<li>
+						<NavLink
+							className="navigation__link navigation__link_type-green"
+							to="signin"
+						>
+							Войти
+						</NavLink>
+					</li>
+				</ul>
+			) : (
+				<>
 					<button
 						className="navigation__burger-button"
 						onClick={() => {
@@ -56,8 +55,8 @@ function Navigation(props) {
 							</NavLink>
 						</li>
 					</ul>
-				</Route>
-			</Switch>
+				</>
+			)}
 		</div>
 	);
 }

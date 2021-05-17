@@ -43,6 +43,10 @@
 	border-radius: 3px;
 }
 
+.form-element__button:disabled {
+	opacity: 0.5;
+}
+
 .form-element__button_place_login {
 	margin-top: 179px;
 }
@@ -79,6 +83,13 @@
 	opacity: 0.7;
 
 	cursor: pointer;
+}
+
+.form-element__error {
+	font-weight: normal;
+	font-size: 10px;
+	line-height: 12px;
+	color: #ee3465;
 }
 
 @media screen and (max-width: 768px) {

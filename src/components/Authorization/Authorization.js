@@ -21,12 +21,22 @@ function Authorization(props) {
 
 				<h2 className="authorization__title">{props.title}</h2>
 
-				<form className="form" name="register" noValidate>
+				<form
+					className="form"
+					name="register"
+					noValidate
+					onSubmit={props.handleSubmit}
+				>
 					{props.children}
 
-					<span id="password-error" className="form-element__error"></span>
+					<span
+						className={`form-element__error form-element__error_place_${props.placeName}`}
+					>
+						{props.isError ? props.errorText : ''}
+					</span>
 
 					<button
+						disabled={!props.isValid}
 						type="submit"
 						className={`form-element__button ${
 							location.pathname === '/signin' &&

@@ -1,82 +1,116 @@
 import React from 'react';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import './MoviesCardList.css';
-import { Route, Switch } from 'react-router';
+import { useLocation } from 'react-router';
+import { WINDOW_WIDTH, BEATFILM_URL } from '../../utils/constants';
+import plug from '../../images/notfound.jpg';
 
 function MoviesCardList(props) {
+	const location = useLocation().pathname;
+	const [sliceNum, setSliceNum] = React.useState(0);
+	const [addCards, setAddCards] = React.useState(0);
+
+	React.useEffect(() => {
+		if (WINDOW_WIDTH.LARGE) {
+			setSliceNum(12);
+			setAddCards(3);
+		} else if (WINDOW_WIDTH.MEDIUM) {
+			setSliceNum(8);
+			setAddCards(2);
+		} else if (WINDOW_WIDTH.SMALL) {
+			setSliceNum(5);
+			setAddCards(2);
+		}
+	}, []);
+
+	window.onresize = () => {
+		if (WINDOW_WIDTH.LARGE) {
+			setTimeout(setAddCards, 2000, 3);
+		} else {
+			setTimeout(setAddCards, 2000, 2);
+		}
+	};
+
+	const handleMoreButton = () => {
+		setSliceNum(sliceNum + addCards);
+	};
+
 	return (
-		<Switch>
-			<Route exact path="/movies">
-				<section className="movie-card-list">
-					<div className="movie-card-list__grid">
-						<MoviesCard
-							title="«Роллинг Стоунз» в изгнании"
-							duration="61"
-							link="https://api.nomoreparties.co/uploads/small_stones_in_exile_b2f1b8f4b7.jpeg"
-						/>
-						<MoviesCard
-							title="В погоне за Бенкси"
-							duration="27"
-							link="https://api.nomoreparties.co/uploads/wyr_139_03_7a244dbd6e.jpeg"
-						/>
-						<MoviesCard
-							title="В погоне за Бенкси"
-							duration="30.05"
-							link="https://api.nomoreparties.co/uploads/Art_Cinema_Webslug_Mr_Baker_de10be970f.jpeg"
-						/>
-						<MoviesCard
-							title="«Роллинг Стоунз» в изгнании"
-							duration="61"
-							link="https://api.nomoreparties.co/uploads/small_stones_in_exile_b2f1b8f4b7.jpeg"
-						/>
-						<MoviesCard
-							title="В погоне за Бенкси"
-							duration="27"
-							link="https://api.nomoreparties.co/uploads/wyr_139_03_7a244dbd6e.jpeg"
-						/>
-						<MoviesCard
-							title="В погоне за Бенкси"
-							duration="30.05"
-							link="https://api.nomoreparties.co/uploads/Art_Cinema_Webslug_Mr_Baker_de10be970f.jpeg"
-						/>
-						<MoviesCard
-							title="«Роллинг Стоунз» в изгнании"
-							duration="61"
-							link="https://api.nomoreparties.co/uploads/small_stones_in_exile_b2f1b8f4b7.jpeg"
-						/>
-						<MoviesCard
-							title="В погоне за Бенкси"
-							duration="27"
-							link="https://api.nomoreparties.co/uploads/wyr_139_03_7a244dbd6e.jpeg"
-						/>
-					</div>
-					<button className="movies-card-list__button" type="button">
+		<section className="movie-card-list">
+			{location === '/movies' ? (
+				<>
+					{props.movies.length === 0 ? (
+						<p className="movies-card-list__text-error">{props.textError}</p>
+					) : (
+						<div className="movie-card-list__grid">
+							{props.movies.slice(0, sliceNum).map((movie) => {
+								return (
+									<MoviesCard
+										title={movie.nameRU ? movie.nameRU : movie.nameEN}
+										key={movie.id}
+										duration={movie.duration ? movie.duration : ''}
+										link={movie.image ? BEATFILM_URL + movie.image.url : plug}
+										favorite={props.saveMovies.some(
+											(saveMovie) => saveMovie.movieId === movie.id
+										)}
+										trailerLink={
+											movie.trailerLink
+												? movie.trailerLink
+												: 'https://www.youtube.com'
+										}
+										createSavedMovie={props.createSavedMovie}
+										cardMovie={movie}
+										movies={props.movies}
+										deleteSavedMovie={props.deleteSavedMovie}
+										saveMovies={props.saveMovies}
+									/>
+								);
+							})}
+						</div>
+					)}
+					<button
+						className={
+							sliceNum >= props.movies.length
+								? 'movies-card-list__button movies-card-list__button_disabled'
+								: 'movies-card-list__button'
+						}
+						onClick={handleMoreButton}
+						type="button"
+					>
 						Ещё
 					</button>
-				</section>
-			</Route>
-			<Route exact path="/saved-movies">
-				<section className="movie-card-list">
-					<div className="movie-card-list__grid">
-						<MoviesCard
-							title="«Роллинг Стоунз» в изгнании"
-							duration="61"
-							link="https://api.nomoreparties.co/uploads/small_stones_in_exile_b2f1b8f4b7.jpeg"
-						/>
-						<MoviesCard
-							title="В погоне за Бенкси"
-							duration="27"
-							link="https://api.nomoreparties.co/uploads/wyr_139_03_7a244dbd6e.jpeg"
-						/>
-						<MoviesCard
-							title="В погоне за Бенкси"
-							duration="30.05"
-							link="https://api.nomoreparties.co/uploads/Art_Cinema_Webslug_Mr_Baker_de10be970f.jpeg"
-						/>
-					</div>
-				</section>
-			</Route>
-		</Switch>
+				</>
+			) : (
+				<>
+					{props.saveMovies.length === 0 ? (
+						<p className="movies-card-list__text-error">{props.textError}</p>
+					) : (
+						<section className="movie-card-list">
+							<div className="movie-card-list__grid">
+								{props.saveMovies.map((movie) => {
+									return (
+										<MoviesCard
+											title={movie.nameRU ? movie.nameRU : movie.nameEN}
+											duration={movie.duration ? movie.duration : ''}
+											link={movie.image ? movie.image : plug}
+											key={movie.movieId}
+											cardMovie={movie}
+											trailerLink={
+												movie.trailerLink
+													? movie.trailerLink
+													: 'https://www.youtube.com'
+											}
+											saveMovies={props.saveMovies}
+											deleteSavedMovie={props.deleteSavedMovie}
+										/>
+									);
+								})}
+							</div>
+						</section>
+					)}
+				</>
+			)}
+		</section>
 	);
 }
 
