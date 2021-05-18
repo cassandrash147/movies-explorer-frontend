@@ -21,7 +21,6 @@ function MoviesCard(props) {
 	}
 
 	const handleRemoveCard = () => {
-		
 		props.deleteSavedMovie(props.cardMovie._id);
 	};
 

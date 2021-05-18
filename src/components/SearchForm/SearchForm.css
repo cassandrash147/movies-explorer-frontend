@@ -2,9 +2,6 @@
 	padding: 80px 70px 0 70px;
 }
 
-.search-form {
-}
-
 .search-form__input {
 	font-weight: 400;
 	font-size: 14px;
@@ -16,6 +13,10 @@
 	width: calc(100% - 92px);
 	height: 48px;
 	padding: 0 0 0 10px;
+}
+
+.search-form__input:disabled {
+	opacity: 0.5;
 }
 
 .search-form__input:focus {
@@ -54,6 +55,10 @@
 	width: 70px;
 	margin-left: 10px;
 	padding: 0;
+}
+
+.search-form__button:disabled {
+	opacity: 0.5;
 }
 
 .search-form__button:hover {

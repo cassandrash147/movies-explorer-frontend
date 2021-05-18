@@ -10,7 +10,6 @@ const SavedMovies = (props) => {
 				setSearchInput={props.setSearchInput}
 				handleSearchMovie={props.handleSearchMovie}
 				setShortMovie={props.setShortMovie}
-				
 			/>
 			<MoviesCardList
 				textError={props.textError}

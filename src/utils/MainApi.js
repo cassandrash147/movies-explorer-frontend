@@ -3,7 +3,6 @@ import { BASE_URL, BEATFILM_URL } from '../utils/constants';
 class Api {
 	constructor({ url }) {
 		this._url = url;
-	
 	}
 
 	async _getResponseData(res) {
@@ -20,7 +19,6 @@ class Api {
 			headers: {
 				authorization: `Bearer ${localStorage.getItem('token')}`,
 				'Content-Type': 'application/json',
-			
 			},
 		}).then((res) => this._getResponseData(res));
 	}

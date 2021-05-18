@@ -9,6 +9,7 @@ function Profile(props) {
 	const currentUser = React.useContext(CurrentUserContext);
 	const [editProfile, setEditProfile] = React.useState(false);
 	const [errorEditText, setErrorEditText] = React.useState('');
+	const [sucsessProfileChange, setSucsessProfileChange] = React.useState(false);
 	const {
 		values,
 		handleChange,
@@ -16,7 +17,6 @@ function Profile(props) {
 		setIsValid,
 		errors,
 	} = useFormWithValidation();
-
 
 	React.useEffect(() => {
 		if (
@@ -31,6 +31,7 @@ function Profile(props) {
 	React.useEffect(() => {
 		values['name'] = currentUser.name;
 		values['email'] = currentUser.email;
+
 		setIsValid(true);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentUser]);
@@ -41,17 +42,28 @@ function Profile(props) {
 
 	const handleSubmitForm = (e) => {
 		e.preventDefault();
+		document.getElementsByClassName('profile__input').disabled = true;
+		document.getElementsByClassName('profile__submit-button').disabled = true;
 		mainApi
 			.editProfile(values['name'], values['email'])
 			.then((userData) => {
 				props.setСurrentUser(userData);
 				values['name'] = currentUser.name;
-        values['email'] = currentUser.email;
+				values['email'] = currentUser.email;
 				setEditProfile(false);
+				setSucsessProfileChange(true);
+				setErrorEditText('');
 			})
 			.catch((err) => {
 				console.log('Ошибка', err);
 				setErrorEditText(err.message);
+			})
+			.finally(() => {
+				document.getElementsByClassName('profile__input').disabled = false;
+				document.getElementsByClassName(
+					'profile__submit-button'
+				).disabled = false;
+				setErrorEditText('');
 			});
 	};
 
@@ -59,10 +71,10 @@ function Profile(props) {
 		e.preventDefault();
 		props.handleLogout();
 	};
-	
+
 	return (
 		<div className="profile">
-			<h2 className="profile__title">Привет, {currentUser.name}!</h2>
+			<h2 className="profile__title">{`Привет, ${currentUser.name}!`}</h2>
 			{!editProfile === true ? (
 				<>
 					<div className="profile_section">
@@ -132,6 +144,22 @@ function Profile(props) {
 						</button>
 					</form>
 				</>
+			)}
+			{sucsessProfileChange === true ? (
+				<div className="profile__sucsess-cover">
+					<div className="profile__sucsess-message">
+						Профиль успешно сохранен
+						<button
+							className="profile__sucsess__close-button"
+							type="button"
+							onClick={() => {
+								setSucsessProfileChange(false);
+							}}
+						/>
+					</div>
+				</div>
+			) : (
+				<></>
 			)}
 		</div>
 	);

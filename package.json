@@ -17,7 +17,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prettier": "prettier --single-quote --use-tabs --trailing-comma es5 --write \"src/**/*.js\"",
+    "prettier": "prettier --single-quote --use-tabs --trailing-comma es5 --write \"src/**/*.css\"",
     "deploy": "npm run build &&pscp -scp -r build* aleks@84.252.141.48:/home/aleks/movies-explorer-front ",
     "copy": "pscp -scp -r build* aleks@84.252.141.48:/home/aleks/movies-explorer-front"
   },

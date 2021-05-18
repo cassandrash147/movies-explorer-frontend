@@ -9,6 +9,8 @@ function Login(props) {
 
 	const handleSubmit = (evt) => {
 		evt.preventDefault();
+		document.getElementsByClassName('form-element__button').disabled = true;
+		document.getElementsByClassName('form-element__input').disabled = true;
 		props.handleSubmit(values['email'], values['password']);
 	};
 

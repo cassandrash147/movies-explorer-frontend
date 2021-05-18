@@ -16,6 +16,6 @@ export const MESSAGE = {
 
 export const BEATFILM_URL = 'https://api.nomoreparties.co';
 
-export const BASE_URL = "https://api.cassandrash.nomoredomains.icu";
+export const BASE_URL = 'https://api.cassandrash.nomoredomains.icu';
 
 // export const BASE_URL = 'http://localhost:3000';

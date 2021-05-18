@@ -15,7 +15,8 @@ function Register(props) {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-
+		document.getElementsByClassName('form-element__input').disabled = true;
+		document.getElementsByClassName('form-element__button').disabled = true;
 		props.handleSubmit(values['name'], values['email'], values['password']);
 
 		resetForm();

@@ -68,9 +68,10 @@
 	border: none;
 	width: 410px;
 	height: 45px;
-	margin: 20px auto 0;
+	margin: 20px 0 0;
 	color: white;
 	border-radius: 3px;
+	padding: 0;
 }
 
 .profile__submit-button:disabled {
@@ -88,6 +89,8 @@
 	font-weight: normal;
 	font-size: 11px;
 	line-height: 13px;
+	width: 460px;
+	text-align: center;
 }
 
 .profile__input {
@@ -105,4 +108,70 @@
 	outline: none;
 
 	border-bottom: 3px solid rgba(139, 139, 139, 1);
+}
+
+.profile__sucsess-cover {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	background-color: (0, 0, 0, 0.5);
+}
+
+.profile__sucsess-message {
+	position: relative;
+	background-color: #202020;
+	font-size: 24px;
+	line-height: 29px;
+	font-weight: 500;
+	text-decoration: none;
+	text-align: center;
+	width: 460px;
+	color: white;
+	padding: 50px;
+	margin: 250px auto;
+	border: 1px solid #424242;
+	border-radius: 6px;
+}
+
+.profile__sucsess__close-button {
+	width: 22px;
+	height: 22px;
+	padding: 0;
+	background-image: url('../../images/close.svg');
+	border: none;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-color: #202020;
+	align-self: flex-end;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+.profile__sucsess__close-button:hover {
+	opacity: 0.8;
+}
+
+@media screen and (max-width: 605px) {
+	.profile_section {
+		width: 260px;
+	}
+
+	.profile__submit-button {
+		width: 260px;
+	}
+
+	.profile__sucsess-message {
+		font-size: 20px;
+		line-height: 25px;
+		width: 260px;
+		padding: 50px 0px 50px;
+	}
+
+	.profile__error {
+		width: 260px;
+	}
 }

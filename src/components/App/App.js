@@ -30,7 +30,8 @@ function App() {
 	const [isSidebar, setSidebar] = React.useState(false);
 	const [searchInput, setSearchInput] = React.useState('');
 	const [isloading, setLoading] = React.useState(false);
-	const [movies, setMovies] = React.useState([]);
+
+	const [filtredMovies, setFiltredMovies] = React.useState([]);
 	const [saveMovies, setSaveMovies] = React.useState([]);
 
 	const [isShortMovie, setShortMovie] = React.useState(false);
@@ -38,8 +39,6 @@ function App() {
 	const [errorText, setErrorText] = React.useState('');
 	const [isError, setError] = React.useState(false);
 	const [isLoginError, setIsLoginError] = React.useState(false);
-
-	
 
 	// ----Функции работы с фильмами---------------------------
 
@@ -60,71 +59,100 @@ function App() {
 					reg.test(film.nameEN)
 				);
 			}
-			
 		});
 	};
 
 	function handleSearchMovie(e) {
-		e.preventDefault();
 		setLoading(true);
-
-		movieApi
-			.getMovies()
-			.then((movieData) => {
-				if (searchInput === '') {
-					setMovieError(MESSAGE.ENTER_TEXT);
-				} else {
-					const filtredMovies = filterMovies(
-						movieData,
-						searchInput,
-						isShortMovie
-					);
-					setMovies(filtredMovies);
-					localStorage.setItem('movies', JSON.stringify(filtredMovies));
-					setMovieError(MESSAGE.NOT_FOUND);
-				}
-			})
-			.catch((err) => {
-				console.log('Ошибка', err);
-				setMovieError(MESSAGE.ERROR);
-			})
-			.finally(() => setTimeout(setLoading, 1500, false));
+		if (!localStorage.getItem('beatfilmmovies')) {
+			movieApi
+				.getMovies()
+				.then((movieData) => {
+					localStorage.setItem('beatfilmmovies', JSON.stringify(movieData));
+					if (searchInput === '') {
+						setMovieError(MESSAGE.ENTER_TEXT);
+					} else {
+						const filtredMovies = filterMovies(
+							movieData,
+							searchInput,
+							isShortMovie
+						);
+						setFiltredMovies(filtredMovies);
+						localStorage.setItem('movies', JSON.stringify(filtredMovies));
+						setMovieError(MESSAGE.NOT_FOUND);
+					}
+				})
+				.catch((err) => {
+					console.log('Ошибка', err);
+					setMovieError(MESSAGE.ERROR);
+				})
+				.finally(() => {
+					setLoading(false);
+					const setEnabled = () => {
+						document.getElementById('search_button').disabled = false;
+						document.getElementById('search_input').disabled = false;
+					};
+					setTimeout(setEnabled, 1500);
+				});
+		} else {
+			const beatfilmMovies = JSON.parse(localStorage.getItem('beatfilmmovies'));
+			const filtredMovies = filterMovies(
+				beatfilmMovies,
+				searchInput,
+				isShortMovie
+			);
+			setFiltredMovies(filtredMovies);
+			localStorage.setItem('movies', JSON.stringify(filtredMovies));
+			setMovieError(MESSAGE.NOT_FOUND);
+			setLoading(false);
+			const setEnabled = () => {
+				document.getElementById('search_button').disabled = false;
+				document.getElementById('search_input').disabled = false;
+			};
+			setTimeout(setEnabled, 1500);
+		}
 	}
-
-	
 
 	React.useEffect(() => {
 		const localStorageMovies = JSON.parse(localStorage.getItem('movies'));
 		if (isLoggedIn) {
 			if (localStorageMovies) {
-				setMovies(localStorageMovies);
+				setFiltredMovies(localStorageMovies);
 			}
 		}
 	}, [isLoggedIn]);
 
 	React.useEffect(() => {
 		
-		if (isLoggedIn && localStorage.getItem('token')) {
+		if (isLoggedIn) {
 			mainApi.getSavedMovies()
 			.then((savedMovieData) => {
-				setSaveMovies(savedMovieData);
-				localStorage.setItem('savedMovies', JSON.stringify(savedMovieData));
+				
+				const mySavedMovies = savedMovieData.filter(
+					(movie) => movie.owner === currentUser.id
+				);
+				
+				setSaveMovies(mySavedMovies);
+				localStorage.setItem('savedMovies', JSON.stringify(saveMovies));
 			});
 		}
-		
-	}, [isLoggedIn, location]);
-
+	}, [isLoggedIn]);
 
 	const getSavedMovies = (e) => {
 		e.preventDefault();
-		const movies = JSON.parse(localStorage.getItem('savedMovies'));
+		const savedMovies = JSON.parse(localStorage.getItem('savedMovies'));
 		if (searchInput === '') {
-			setSaveMovies(movies);
+			setSaveMovies(savedMovies);
 		} else {
-			const filteredMovies = filterMovies(movies, searchInput, isShortMovie);
+			const filteredMovies = filterMovies(
+				savedMovies,
+				searchInput,
+				isShortMovie
+			);
 			setMovieError(MESSAGE.NOT_FOUND);
 			setSaveMovies(filteredMovies);
-			
+			document.getElementById('search_button').disabled = false;
+			document.getElementById('search_input').disabled = false;
 		}
 	};
 
@@ -162,8 +190,6 @@ function App() {
 			});
 	}
 
-	
-
 	// ----Функции автозирации---------------------------
 	function handleRegister(name, email, password) {
 		mainApi
@@ -188,7 +214,7 @@ function App() {
 					setLoggedIn(true);
 					localStorage.setItem('token', result.token);
 					setLoggedIn(true);
-					handleTokenCheck()
+					handleTokenCheck();
 					setIsLoginError(false);
 				}
 			})
@@ -204,6 +230,7 @@ function App() {
 		localStorage.removeItem('token');
 		localStorage.removeItem('movies');
 		localStorage.removeItem('savedMovies');
+		localStorage.removeItem('beatfilmmovies');
 		setСurrentUser({
 			name: '',
 			email: '',
@@ -211,39 +238,38 @@ function App() {
 		history.push('/');
 	}
 
-	
 	React.useEffect(() => {
-		if(isLoggedIn){
-			const token = localStorage.getItem('token');
-			handleTokenCheck()
-		}
+		handleTokenCheck();
 		
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isLoggedIn]);
+	}, []);
 
-	function handleTokenCheck(){
-
-		if(localStorage.getItem('token')){
+	function handleTokenCheck() {
+		if (localStorage.getItem('token')) {
 			const token = localStorage.getItem('token');
-			
-			mainApi.getCurrentUser(token).then((res)=>{
-				
-				setСurrentUser({id: res._id, name: res.name, email: res.email});
-				setCurrentToken(token);
-				
-				setLoggedIn(true);
-			
-					if (location === '/') {
+
+			mainApi
+				.getCurrentUser(token)
+				.then((res) => {
+					setСurrentUser({ id: res._id, name: res.name, email: res.email });
+					setCurrentToken(token);
+
+					setLoggedIn(true);
+
+					if (location === '/movies') {
 						history.push('/movies');
+					} else if (location === '/saved-movies') {
+						history.push('/saved-movies');
+					} else if (location === '/profile') {
+						history.push('/profile');
 					} else {
-						history.push(location);
+						history.push('/movies');
 					}
-			})
-			.catch((err) => console.log(err));
+				})
+				.catch((err) => console.log(err));
 		}
 	}
-
-	
+console.log(isLoggedIn)
 	// -----------------------------------------------------------------
 	return (
 		<CurrentUserContext.Provider value={currentUser}>
@@ -266,7 +292,7 @@ function App() {
 						setSearchInput={setSearchInput}
 						handleSearchMovie={handleSearchMovie}
 						searchInput={searchInput}
-						movies={movies}
+						movies={filtredMovies}
 						textError={movieError}
 						createSavedMovie={createSavedMovie}
 						deleteSavedMovie={deleteSavedMovie}

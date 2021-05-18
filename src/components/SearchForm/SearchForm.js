@@ -2,8 +2,6 @@ import React from 'react';
 import './SearchForm.css';
 
 const SearchForm = (props) => {
-	
-
 	function handleSlider(e) {
 		if (e.target.checked) {
 			props.setShortMovie(true);
@@ -14,16 +12,20 @@ const SearchForm = (props) => {
 
 	const handleTextValue = (e) => {
 		props.setSearchInput(e.target.value);
-}
-	
+	};
+
+	const handleSearchMovie = (e) => {
+		e.preventDefault();
+		document.getElementById('search_input').disabled = true;
+		document.getElementById('search_button').disabled = true;
+		props.handleSearchMovie(e);
+	};
+
 	return (
 		<div className="search-form__container">
-			<form
-				className="search-form"
-				noValidate
-				onSubmit={props.handleSearchMovie}
-			>
+			<form className="search-form" noValidate onSubmit={handleSearchMovie}>
 				<input
+					id="search_input"
 					className={'search-form__input'}
 					type="text"
 					placeholder="Фильм"
@@ -33,7 +35,11 @@ const SearchForm = (props) => {
 					onChange={handleTextValue}
 				/>
 
-				<button type="submit" className="search-form__button">
+				<button
+					type="submit"
+					className="search-form__button"
+					id="search_button"
+				>
 					Найти
 				</button>
 			</form>
